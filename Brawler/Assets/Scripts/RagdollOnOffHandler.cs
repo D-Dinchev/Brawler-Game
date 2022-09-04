@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RagdollOnOffHandler : MonoBehaviour
@@ -24,7 +22,11 @@ public class RagdollOnOffHandler : MonoBehaviour
             {
                 GameManager.Instance.SetGameEndBool(new EventManager.OnRestartGameEventArgs() { GameEnded = true });
                 EventManager.Instance.StopGameTrigger();
-                EventManager.Instance.LoseGameTrigger("НЕВДАХА!");
+
+                EventManager.OnLoseGameEventArgs args = new EventManager.OnLoseGameEventArgs();
+                args.Clip = SoundManager.Instance.FindClip("lose");
+                args.endGameText = "YOU LOSE!";
+                EventManager.Instance.LoseGameTrigger(args);
             }
 
             RagdollModeOn();

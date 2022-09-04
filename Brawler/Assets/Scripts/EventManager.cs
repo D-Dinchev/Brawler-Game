@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EventManager : MonoBehaviour
@@ -12,10 +10,19 @@ public class EventManager : MonoBehaviour
         Instance = this;
     }
 
-    public event Action OnStartGame;
-    public void StartGameTrigger()
+    public event Action<OnStartEventArgs> OnStartGame;
+    public class OnStartEventArgs : EventArgs
     {
-        OnStartGame?.Invoke();
+        public AudioClip Clip;
+    }
+    public void StartGameTrigger(OnStartEventArgs args)
+    {
+        OnStartGame?.Invoke(args);
+    }
+
+    public void StartGameTriggerForButtonClick()
+    {
+        StartGameTrigger(new OnStartEventArgs());
     }
 
     public event Action<OnRestartGameEventArgs> OnRestartGame;
@@ -23,6 +30,8 @@ public class EventManager : MonoBehaviour
     public class OnRestartGameEventArgs : EventArgs
     {
         public bool GameEnded;
+
+        public AudioClip Clip;
     }
 
     public void RestartGameTriggerForButtonClick()
@@ -40,21 +49,40 @@ public class EventManager : MonoBehaviour
         OnStopGame?.Invoke();
     }
 
-    public event Action<string> OnWinGame;
-    public void WinGameTrigger(string endGameText)
+    public event Action<OnWinGameEventArgs> OnWinGame;
+    public class OnWinGameEventArgs : EventArgs
     {
-        OnWinGame?.Invoke(endGameText);
+        public AudioClip Clip;
+
+        public string endGameText;
     }
 
-    public event Action<string> OnLoseGame;
-    public void LoseGameTrigger(string endGameText)
+    public void WinGameTrigger(OnWinGameEventArgs args)
     {
-        OnLoseGame?.Invoke(endGameText);
+        OnWinGame?.Invoke(args);
     }
 
-    public event Action OnBoxFell;
-    public void BoxFellTrigger()
+    public event Action<OnLoseGameEventArgs> OnLoseGame;
+    public class OnLoseGameEventArgs : EventArgs
     {
-        OnBoxFell?.Invoke();
+        public AudioClip Clip;
+
+        public string endGameText;
+    }
+
+    public void LoseGameTrigger(OnLoseGameEventArgs args)
+    {
+        OnLoseGame?.Invoke(args);
+    }
+
+    public event Action<OnBoxFellEventArgs> OnBoxFell;
+
+    public class OnBoxFellEventArgs : EventArgs
+    {
+        public AudioClip Clip;
+    }
+    public void BoxFellTrigger(OnBoxFellEventArgs args)
+    {
+        OnBoxFell?.Invoke(args);
     }
 }

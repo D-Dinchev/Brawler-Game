@@ -56,7 +56,12 @@ public class Timer : MonoBehaviour
             _stopTimer = true;
             GameManager.Instance.SetGameEndBool(new EventManager.OnRestartGameEventArgs() { GameEnded = true });
             EventManager.Instance.StopGameTrigger();
-            EventManager.Instance.LoseGameTrigger("НЕВДАХА");
+
+            EventManager.OnLoseGameEventArgs args = new EventManager.OnLoseGameEventArgs();
+            args.Clip = SoundManager.Instance.FindClip("lose");
+            args.endGameText = "YOU LOSE!";
+
+            EventManager.Instance.LoseGameTrigger(args);
         }
 
         if (!_stopTimer)
@@ -74,7 +79,7 @@ public class Timer : MonoBehaviour
         return string.Format("{0:00} : {1:00}", minutes, seconds);
     }
 
-    private void LaunchTimer()
+    private void LaunchTimer(EventManager.OnStartEventArgs args)
     {
         _stopTimer = false;
     }

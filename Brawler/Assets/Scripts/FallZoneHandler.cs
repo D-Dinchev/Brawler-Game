@@ -6,7 +6,9 @@ public class FallZoneHandler : MonoBehaviour
     {
         if (otherCollider.CompareTag("Box") && !GameManager.Instance.GameEnded)
         {
-            EventManager.Instance.BoxFellTrigger();
+            EventManager.OnBoxFellEventArgs args = new EventManager.OnBoxFellEventArgs();
+            args.Clip = SoundManager.Instance.FindClip("box_out");
+            EventManager.Instance.BoxFellTrigger(args);
         }
     }
 }
