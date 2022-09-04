@@ -9,7 +9,7 @@ public class StartButtonHandler : MonoBehaviour
         EventManager.Instance.OnStartGame += HideButton;
     }
 
-    private void HideButton()
+    private void HideButton(EventManager.OnStartEventArgs args)
     {
         transform.localScale = Vector3.zero;
     }

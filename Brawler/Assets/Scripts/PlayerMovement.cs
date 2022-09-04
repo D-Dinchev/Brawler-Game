@@ -112,7 +112,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void Enable()
+    private void Enable(EventManager.OnStartEventArgs args)
     {
         enabled = true;
     }

@@ -47,12 +47,17 @@ public class GameManager : MonoBehaviour
     }
 
 
-    private void ShowText(string text)
+    private void ShowText(EventManager.OnLoseGameEventArgs args)
     {
-        _endGameText.text = text;
+        _endGameText.text = args.endGameText;
         _endGameTextObject.SetActive(true);
     }
 
+    private void ShowText(EventManager.OnWinGameEventArgs args)
+    {
+        _endGameText.text = args.endGameText;
+        _endGameTextObject.SetActive(true);
+    }
 
     private void HideObject(EventManager.OnRestartGameEventArgs args)
     {
@@ -64,7 +69,12 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < _boxes.Length; i++)
         {
-            _boxes[i].transform.position = _boxesStartPosition[i];
+            var box = _boxes[i];
+
+            box.transform.position = _boxesStartPosition[i];
+            box.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            box.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+            box.transform.rotation = Quaternion.identity;
         }
     }
 
@@ -75,7 +85,11 @@ public class GameManager : MonoBehaviour
         {
             SetGameEndBool(new EventManager.OnRestartGameEventArgs() { GameEnded = true });
             EventManager.Instance.StopGameTrigger();
-            EventManager.Instance.WinGameTrigger("КРАСАВЧИК!");
+
+            EventManager.OnWinGameEventArgs args = new EventManager.OnWinGameEventArgs();
+            args.Clip = SoundManager.Instance.FindClip("win");
+            args.endGameText = "YOU WIN!";
+            EventManager.Instance.WinGameTrigger(args);
         }
     }
 
@@ -84,7 +98,7 @@ public class GameManager : MonoBehaviour
         _boxesToPushCount = _boxes.Length;
     }
 
-    private void DecrementBoxesCount()
+    private void DecrementBoxesCount(EventManager.OnBoxFellEventArgs args)
     {
         if (!GameEnded)
         {
