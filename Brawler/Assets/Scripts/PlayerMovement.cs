@@ -11,6 +11,8 @@ public class PlayerMovement : MonoBehaviour
     private float _verticalInput;
     [SerializeField]
     private float _groundDrag;
+    [SerializeField]
+    private float _airDrag;
 
     private Vector3 _movementDirection;
 
@@ -26,11 +28,11 @@ public class PlayerMovement : MonoBehaviour
 
     private Animator _animator;
 
+    [SerializeField]
+    private FloatingJoystick _joystick;
 
     private void Awake()
     {
-        Physics.gravity *= 1f;
-
         _orientation = transform.GetChild(2);
 
         _rb = GetComponent<Rigidbody>();
@@ -68,19 +70,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void PlayerInput()
     {
-        _horizontalInput = Input.GetAxis("Horizontal");
-        _verticalInput = Input.GetAxis("Vertical");
-
-        if (Input.touchCount > 0)
-        {
-            _horizontalInput = Input.touches[0].deltaPosition.x;
-            _verticalInput = Input.touches[0].deltaPosition.y;
-        }
+        _horizontalInput = _joystick.Horizontal;
+        _verticalInput = _joystick.Vertical;
     }
 
     private void MoveAndRotatePlayer()
     {
-        _movementDirection = Vector3.forward * _verticalInput + Vector3.right * _horizontalInput;
+        _movementDirection = new Vector3(_joystick.Direction.x, _movementDirection.y, _joystick.Direction.y);
         _rb.AddForce(_movementDirection.normalized * _forceValue * 10f, ForceMode.Force);
 
         if (_movementDirection != Vector3.zero)
@@ -108,7 +104,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            _rb.drag = 0f;
+            _rb.drag = _airDrag;
         }
     }
 

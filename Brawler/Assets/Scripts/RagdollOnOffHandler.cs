@@ -50,9 +50,14 @@ public class RagdollOnOffHandler : MonoBehaviour
             collider.enabled = true;
         }
 
+        Vector3 mainVelocity = GetComponent<Rigidbody>().velocity;
+        Vector3 rotation = GetComponent<Rigidbody>().angularVelocity;
         foreach (var rb in _limbsRigidbodies)
         {
             rb.isKinematic = false;
+            rb.velocity = mainVelocity;
+            rb.angularVelocity = rotation;
+            rb.drag = 1.25f;
         }
 
         MainCollider.enabled = false;
