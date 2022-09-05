@@ -12,6 +12,7 @@ public class StartButtonHandler : MonoBehaviour
     private void HideButton(EventManager.OnStartEventArgs args)
     {
         transform.localScale = Vector3.zero;
+        gameObject.SetActive(false);
     }
 
     private void OnDestroy()
