@@ -70,10 +70,12 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < _boxes.Length; i++)
         {
             var box = _boxes[i];
+            Rigidbody rb = box.GetComponent<Rigidbody>();
 
             box.transform.position = _boxesStartPosition[i];
-            box.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            box.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.constraints = RigidbodyConstraints.FreezeRotationY;
             box.transform.rotation = Quaternion.identity;
         }
     }

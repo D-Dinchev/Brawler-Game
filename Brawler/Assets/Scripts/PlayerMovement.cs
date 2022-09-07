@@ -64,8 +64,8 @@ public class PlayerMovement : MonoBehaviour
 
 
     private void FixedUpdate()
-    {
-       if(_isGrounded) MoveAndRotatePlayer();
+    { 
+        MoveAndRotatePlayer();
     }
 
     private void PlayerInput()
@@ -74,16 +74,17 @@ public class PlayerMovement : MonoBehaviour
         _verticalInput = _joystick.Vertical;
     }
 
+
     private void MoveAndRotatePlayer()
     {
-        _movementDirection = new Vector3(_joystick.Direction.x, _movementDirection.y, _joystick.Direction.y);
-        _rb.AddForce(_movementDirection.normalized * _forceValue * 10f, ForceMode.Force);
+        _movementDirection = Vector3.forward * _verticalInput + Vector3.right * _horizontalInput;
+        transform.position += _movementDirection * _forceValue * Time.fixedDeltaTime;
 
         if (_movementDirection != Vector3.zero)
         {
             _animator.SetBool("isMoving", true);
-            Quaternion toRotation = Quaternion.LookRotation(_movementDirection.normalized, _orientation.up);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, _rotationSpeed);
+            Quaternion toRotation = Quaternion.LookRotation(_movementDirection, _orientation.up);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, _rotationSpeed * Time.fixedDeltaTime);
         }
         else
         {
