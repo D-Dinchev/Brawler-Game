@@ -9,6 +9,8 @@ public class FallZoneHandler : MonoBehaviour
             EventManager.OnBoxFellEventArgs args = new EventManager.OnBoxFellEventArgs();
             args.Clip = SoundManager.Instance.FindClip("box_out");
             EventManager.Instance.BoxFellTrigger(args);
+
+            otherCollider.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
         }
     }
 }
